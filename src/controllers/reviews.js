@@ -67,8 +67,8 @@ export const modifyReview = async (req, res, next) => {
     const findReview = reviews.filter((review) => review._id !== req.params.id);
 
     const modifiedReview = {
-      ...req.body,
       _id: req.params.id,
+      ...req.body,
       updatedAt: new Date(),
     };
 
