@@ -1,5 +1,5 @@
-import { v4 as uuidv4 } from 'uuid';
-import { fetchReviews, writeReviews } from '../utils/fsUtils.js';
+import { v4 as uuidv4 } from "uuid";
+import { fetchReviews, writeReviews, fetchProducts } from "../utils/fsUtils.js";
 
 // @desc    Get all reviews
 // @route   GET /reviews/:id
@@ -7,11 +7,25 @@ export const getReviews = async (req, res, next) => {
   try {
     const reviews = await fetchReviews();
 
-    const filteredReviews = reviews.filter((rev) => rev._id === req.param.id);
-    if (filteredReviews) {
-      res.status(200).send(filteredReviews);
+    res.status(200).send(reviews);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// @desc    get review by id
+// @route   POST /reviews/:id
+
+export const getReviewsById = async (req, res, next) => {
+  try {
+    const reviews = await fetchReviews();
+
+    const findReview = reviews.find((rev) => rev._id === req.params.id);
+
+    if (findReview) {
+      res.status(200).send(findReview);
     } else {
-      res.status(200).send(reviews);
+      res.status(400).send("Review with that id not found");
     }
   } catch (error) {
     console.log(error);
@@ -62,7 +76,7 @@ export const modifyReview = async (req, res, next) => {
 
     await writeReviews(findReview);
 
-    res.status(201).send('Edited successful', { _id: modifiedReview._id });
+    res.status(201).send("Edited successful", { _id: modifiedReview._id });
   } catch (error) {
     console.log(error);
   }
@@ -80,6 +94,41 @@ export const deleteReview = async (req, res, next) => {
     await writeReviews(findReview);
 
     res.status(204).send();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const postReviewOnProductId = async (req, res, next) => {
+  try {
+    const reviews = await fetchReviews();
+    const products = await fetchProducts();
+    console.log(products);
+    const product_id = req.params.id;
+
+    console.log(product_id);
+
+    const findProduct = products.filter(
+      (product) => product._id === product_id
+    );
+    console.log(findProduct);
+
+    if (findProduct) {
+      const newReview = {
+        _id: uuidv4(),
+        ...req.body,
+        productId: product_id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      reviews.push(newReview);
+
+      await writeReviews(reviews);
+
+      res.status(201).send({ _id: newReview._id });
+    } else {
+      res.status(400).send("Product id not found");
+    }
   } catch (error) {
     console.log(error);
   }
