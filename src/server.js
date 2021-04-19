@@ -3,7 +3,12 @@ import morgan from 'morgan';
 import cors from 'cors';
 import productsRoutes from './routes/products.js';
 import reviewsRoutes from './routes/reviews.js';
+import { fileURLToPath } from 'url';
+import { join, dirname } from 'path';
 
+const currentFile = fileURLToPath(import.meta.url);
+const currentFolder = dirname(currentFile);
+const publicFolder = join(currentFolder, '../public');
 const app = express();
 
 if (process.env.NODE_ENV === 'development') {
@@ -11,6 +16,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use(cors());
+app.use(express.static(publicFolder));
 app.use(express.json());
 
 app.use('/products', productsRoutes);
