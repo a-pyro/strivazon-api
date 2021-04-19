@@ -50,7 +50,7 @@ export const modifyReview = async (req, res, next) => {
     const modifiedReview = {
       ...req.body,
       _id: req.params.id,
-      modifiedAt: new Date(),
+      updatedAt: new Date(),
     };
 
     findReview.push(modifiedReview);
