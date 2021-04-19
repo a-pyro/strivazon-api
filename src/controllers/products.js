@@ -1,12 +1,21 @@
 import { v4 as uuidv4 } from 'uuid';
 import ErrorResponse from '../utils/errorResponse.js';
-import { fetchProducts, writeProducts } from '../utils/fsUtils.js';
+import {
+  fetchProducts,
+  writeProducts,
+  writeProductsPics,
+} from '../utils/fsUtils.js';
+import { extname } from 'path';
 
 // @desc    Get all products
 // @route   GET /products
 export const getProducts = async (req, res, next) => {
-  const products = await fetchProducts();
-  res.status(200).send({ success: true, data: products });
+  try {
+    const products = await fetchProducts();
+    res.status(200).send({ success: true, data: products });
+  } catch (error) {
+    next(error);
+  }
 };
 
 // @desc    add product
@@ -37,24 +46,28 @@ export const addProduct = async (req, res, next) => {
 // @route   PUT /products/:id
 
 export const modifyProduct = async (req, res, next) => {
-  const products = await fetchProducts();
-  let modifiedProduct;
+  try {
+    const products = await fetchProducts();
+    let modifiedProduct;
 
-  if (products.some((prod) => prod._id === req.params.id)) {
-    const newProducts = products.reduce((acc, cv) => {
-      if (cv._id === req.params.id) {
-        modifiedProduct = { ...cv, ...req.body, updatedAt: new Date() };
-        acc.push(modifiedProduct);
+    if (products.some((prod) => prod._id === req.params.id)) {
+      const newProducts = products.reduce((acc, cv) => {
+        if (cv._id === req.params.id) {
+          modifiedProduct = { ...cv, ...req.body, updatedAt: new Date() };
+          acc.push(modifiedProduct);
+          return acc;
+        }
+        acc.push(cv);
         return acc;
-      }
-      acc.push(cv);
-      return acc;
-    }, []);
+      }, []);
 
-    await writeProducts(newProducts);
-    res.status(200).send({ success: true, data: modifiedProduct });
-  } else {
-    next(new ErrorResponse('Product not found', 404));
+      await writeProducts(newProducts);
+      res.status(200).send({ success: true, data: modifiedProduct });
+    } else {
+      next(new ErrorResponse('Product not found', 404));
+    }
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -62,19 +75,54 @@ export const modifyProduct = async (req, res, next) => {
 // @route   DELETE /products/:id
 
 export const deleteProduct = async (req, res, next) => {
-  const products = await fetchProducts();
-  if (products.some((prod) => prod._id === req.params.id)) {
-    const newProducts = products.filter((prod) => prod._id !== req.params.id);
-    res.status(200).send({ success: true, message: 'product removed' });
-    await writeProducts(newProducts);
-  } else {
-    next(new ErrorResponse('Product not found', 404));
+  try {
+    const products = await fetchProducts();
+    if (products.some((prod) => prod._id === req.params.id)) {
+      const newProducts = products.filter((prod) => prod._id !== req.params.id);
+      res.status(200).send({ success: true, message: 'product removed' });
+      await writeProducts(newProducts);
+    } else {
+      next(new ErrorResponse('Product not found', 404));
+    }
+  } catch (error) {
+    next(error);
   }
 };
 
 // @desc    add image to product
 // @route   POST /products/:id/upload
-export const uploadProductPic = async (req, res, next) => {};
+export const uploadProductPic = async (req, res, next) => {
+  try {
+    const products = await fetchProducts();
+    if (products.some((prod) => prod._id === req.params.id)) {
+      console.log(req.file);
+      const { buffer, originalname } = req.file;
+      const filename = req.params.id + extname(originalname);
+      const imgUrl = `${req.protocol}://${req.get(
+        'host'
+      )}/img/products/${filename}`;
+      //scrivo nel file url
+      const newProducts = products.reduce((acc, cv) => {
+        if (cv._id === req.params.id) {
+          cv.imgUrl = imgUrl;
+          cv.updatedAt = new Date();
+          acc.push(cv);
+          return acc;
+        }
+        acc.push(cv);
+        return acc;
+      }, []);
+      await writeProducts(newProducts);
+      await writeProductsPics(filename, buffer);
+      res.status(200).send({ success: true, imgUrl: `${imgUrl}` });
+    } else {
+      next(new ErrorResponse('Product not found', 404));
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 
 // @desc    get reviews for a product
 // @route   GET /products/:id/reviews
