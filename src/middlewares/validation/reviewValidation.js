@@ -24,6 +24,7 @@ export const validateReview = [
   },
 ];
 
+// doesnt work, needs more testing
 const validateSchemaReview = {
   comment: {
     notEmpty: true,
