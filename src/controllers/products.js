@@ -13,8 +13,24 @@ import { extname } from 'path';
 export const getProducts = async (req, res, next) => {
   try {
     const products = await fetchProducts();
+
     res.status(200).send({ success: true, data: products });
   } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get all products by query
+// @route   GET /products?
+export const getProductsByQuery = async (req, res, next) => {
+  try {
+    if (req.query) {
+      console.log(req.query);
+    } else {
+      next();
+    }
+  } catch (error) {
+    console.log(error);
     next(error);
   }
 };
@@ -136,12 +152,10 @@ export const getProductReviews = async (req, res, next) => {
         (rev) => rev.productId === req.params.id
       );
       if (productReviews.length === 0) {
-        return res
-          .status(200)
-          .send({
-            success: true,
-            message: 'no reviews available for that product',
-          });
+        return res.status(200).send({
+          success: true,
+          message: 'no reviews available for that product',
+        });
       }
       res.status(200).send({ success: true, data: productReviews });
     } else {

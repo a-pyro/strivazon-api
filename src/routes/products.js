@@ -6,6 +6,7 @@ import {
   deleteProduct,
   uploadProductPic,
   getProductReviews,
+  getProductsByQuery,
 } from '../controllers/products.js';
 import {
   multerValidation,
@@ -14,7 +15,10 @@ import {
 const upload = multerValidation();
 const router = Router();
 
-router.route('/').get(getProducts).post(validateProduct, addProduct);
+router
+  .route('/')
+  .get(getProductsByQuery, getProducts)
+  .post(validateProduct, addProduct);
 
 router.route('/:id').put(validateProduct, modifyProduct).delete(deleteProduct);
 
