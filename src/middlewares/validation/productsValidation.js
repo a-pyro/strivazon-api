@@ -18,7 +18,7 @@ export const validateProduct = [
         400,
         'productValidation'
       );
-      error.errList = errors;
+      error.errList = errors.errors;
       return next(error);
     }
     next();
