@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import ErrorResponse from '../utils/errorResponse.js';
 import { fetchProducts, writeProducts } from '../utils/fsUtils.js';
 
 // @desc    Get all products
@@ -56,7 +57,16 @@ export const modifyProduct = async (req, res, next) => {
 // @desc    delete product
 // @route   DELETE /products/:id
 
-export const deleteProduct = async (req, res, next) => {};
+export const deleteProduct = async (req, res, next) => {
+  const products = await fetchProducts();
+  if (products.some((prod) => prod._id === req.params.id)) {
+    const newProducts = products.filter((prod) => prod._id !== req.params.id);
+    res.status(200).send({ success: true, message: 'product removed' });
+    await writeProducts(newProducts);
+  } else {
+    next(new ErrorResponse('Product not found', 404));
+  }
+};
 
 // @desc    add image to product
 // @route   POST /products/:id/upload
