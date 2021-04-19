@@ -2,10 +2,11 @@
   "name": "strivazon-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/server.js",
+  "type": "module",
   "scripts": {
     "start": "NODE_ENV=production node ./src/server",
-    "dev": "nodemon ./src/server"
+    "dev": "nodemon -e js -r dotenv/config ./src/server.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-validator": "^6.10.0",
     "fs-extra": "^9.1.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
