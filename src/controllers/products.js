@@ -4,7 +4,8 @@ import { fetchProducts, writeProducts } from '../utils/fsUtils.js';
 // @desc    Get all products
 // @route   GET /products
 export const getProducts = async (req, res, next) => {
-  res.send({ hi: 'hiiiiii' });
+  const products = await fetchProducts();
+  res.status(200).send({ success: true, data: products });
 };
 
 // @desc    add product
@@ -13,7 +14,12 @@ export const getProducts = async (req, res, next) => {
 export const addProduct = async (req, res, next) => {
   try {
     const products = await fetchProducts();
-    const newProduct = { ...req.body, _id: uuidv4(), createdAt: new Date() };
+    const newProduct = {
+      ...req.body,
+      _id: uuidv4(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
     console.log(products);
     // const productAlreadyPresent = products.some(prod => {
     //   if(prod.name.LowerCase() === newProduct.name.toLowerCase() || )
@@ -29,7 +35,23 @@ export const addProduct = async (req, res, next) => {
 // @desc    modify  product
 // @route   PUT /products/:id
 
-export const modifyProduct = async (req, res, next) => {};
+export const modifyProduct = async (req, res, next) => {
+  const products = await fetchProducts();
+  let modifiedProduct;
+
+  const newProducts = products.reduce((acc, cv) => {
+    if (cv._id === req.params.id) {
+      modifiedProduct = { ...cv, ...req.body, updatedAt: new Date() };
+      acc.push(modifiedProduct);
+      return acc;
+    }
+    acc.push(cv);
+    return acc;
+  }, []);
+
+  await writeProducts(newProducts);
+  res.status(200).send({ success: true, data: modifiedProduct });
+};
 
 // @desc    delete product
 // @route   DELETE /products/:id

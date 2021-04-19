@@ -13,7 +13,7 @@ const router = Router();
 
 router.route('/').get(getProducts).post(validateProduct, addProduct);
 
-router.route('/:id').put(modifyProduct).delete(deleteProduct);
+router.route('/:id').put(validateProduct, modifyProduct).delete(deleteProduct);
 
 router.route('/:id/upload').post(uploadProductPic);
 
