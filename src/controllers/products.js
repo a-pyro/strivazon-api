@@ -2,6 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import ErrorResponse from '../utils/errorResponse.js';
 import {
   fetchProducts,
+  fetchReviews,
   writeProducts,
   writeProductsPics,
 } from '../utils/fsUtils.js';
@@ -128,6 +129,24 @@ export const uploadProductPic = async (req, res, next) => {
 // @route   GET /products/:id/reviews
 export const getProductReviews = async (req, res, next) => {
   try {
+    const products = await fetchProducts();
+    if (products.some((prod) => prod._id === req.params.id)) {
+      const reviews = await fetchReviews();
+      const productReviews = reviews.filter(
+        (rev) => rev.productId === req.params.id
+      );
+      if (productReviews.length === 0) {
+        return res
+          .status(200)
+          .send({
+            success: true,
+            message: 'no reviews available for that product',
+          });
+      }
+      res.status(200).send({ success: true, data: productReviews });
+    } else {
+      next(new ErrorResponse('Product not found', 404));
+    }
   } catch (error) {
     console.log(error);
     next(error);
