@@ -26,17 +26,23 @@ export const getProductsByQuery = async (req, res, next) => {
   try {
     if (Object.keys(req.query).length > 0) {
       const products = await fetchProducts();
-      const output = {};
+      let output = [];
+
+      // console.log(req.query);
+      // const output = products.filter((prod) => prod[req]);
       for (const key in req.query) {
         const query = key.toLowerCase();
         const value = req.query[query].toLowerCase();
         // console.log(query, ':', value);
         // console.log(products);
-        const found = products.filter((prod) => prod[query] === value);
+        // const found = products.filter((prod) => prod[query] === value);
         // console.log(found);
-        output[value] = [...found];
+        // output[value] = [...found];
         // console.log(query, value);
+        const found = products.filter((prod) => prod[query] === value);
+        output.push();
       }
+
       res.status(200).send({ success: true, data: output });
     } else {
       next();

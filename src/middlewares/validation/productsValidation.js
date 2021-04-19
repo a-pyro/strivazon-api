@@ -1,4 +1,4 @@
-import { check, validationResult } from 'express-validator';
+import { check, checkSchema, validationResult } from 'express-validator';
 import ErrorResponse from '../../utils/errorResponse.js';
 import multer from 'multer';
 import { extname } from 'path';
@@ -45,3 +45,15 @@ export const multerValidation = (req, res, next) => {
   });
   return upload.single('productPic');
 };
+
+// const productSchema = {
+//   name: 'iPhone 13',
+//   description: 'straight from the future',
+//   brand: 'apple',
+//   price: 1000,
+//   category: 'smartphones',
+// };
+
+// export const validateProductSchema = (req, res, next) => {
+//   checkSchema()
+// }
