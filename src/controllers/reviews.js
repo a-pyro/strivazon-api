@@ -23,7 +23,7 @@ export const addReview = async (req, res, next) => {
     const newReview = {
       _id: uuidv4(),
       ...req.body,
-      productId: req.body._id,
+      //   productId: req.body._id,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

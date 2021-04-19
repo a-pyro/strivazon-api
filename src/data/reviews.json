@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "_id": "204f81ff-cb3e-4351-b492-a7289f63cb80",
+    "comment": "something for the road",
+    "rate": "1",
+    "productId": "randomstringID-i-made-up",
+    "createdAt": "2021-04-19T13:37:51.499Z",
+    "updatedAt": "2021-04-19T13:37:51.499Z"
+  }
+]
