@@ -11,10 +11,10 @@ const productsFiles = join(
   "../../public/img/products"
 );
 
-export const getProducts = async () =>
+export const fetchProducts = async () =>
   await readJSON(join(allData, "products.json"));
 
-export const getReviews = async () =>
+export const fetchReviews = async () =>
   await readJSON(join(allData, "reviews.json"));
 
 export const writeProducts = async (content) =>
