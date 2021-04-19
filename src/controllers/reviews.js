@@ -106,12 +106,9 @@ export const postReviewOnProductId = async (req, res, next) => {
     console.log(products);
     const product_id = req.params.id;
 
-    console.log(product_id);
-
     const findProduct = products.filter(
       (product) => product._id === product_id
     );
-    console.log(findProduct);
 
     if (findProduct) {
       const newReview = {
