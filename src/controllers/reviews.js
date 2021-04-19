@@ -7,7 +7,12 @@ export const getReviews = async (req, res, next) => {
   try {
     const reviews = await fetchReviews();
 
-    res.status(200).send(reviews);
+    const filteredReviews = reviews.filter((rev) => rev._id === req.param.id);
+    if (filteredReviews) {
+      res.status(200).send(filteredReviews);
+    } else {
+      res.status(200).send(reviews);
+    }
   } catch (error) {
     console.log(error);
   }
