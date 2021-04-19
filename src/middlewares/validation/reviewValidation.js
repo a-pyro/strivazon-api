@@ -6,8 +6,8 @@ export const validateReview = [
   check("rate")
     .trim()
     .notEmpty()
-    .isFloat({ min: 0, max: 5 })
-    .withMessage("rating must be a number between 0 and 5"),
+    .isFloat({ min: 1, max: 5 })
+    .withMessage("rating must be a number between 1 and 5"),
   check("productId").trim().notEmpty().withMessage("productId cannot be empty"),
   (req, res, next) => {
     const errors = validationResult(req);
