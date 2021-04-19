@@ -1,5 +1,5 @@
-import { v4 as uuidv4 } from "uuid";
-import { fetchReviews, writeReviews } from "../utils/fsUtils.js";
+import { v4 as uuidv4 } from 'uuid';
+import { fetchReviews, writeReviews } from '../utils/fsUtils.js';
 
 // @desc    Get all reviews
 // @route   GET /reviews/:id
@@ -57,7 +57,7 @@ export const modifyReview = async (req, res, next) => {
 
     await writeReviews(findReview);
 
-    res.status(201).send("Edited successful", { _id: modifiedReview._id });
+    res.status(201).send('Edited successful', { _id: modifiedReview._id });
   } catch (error) {
     console.log(error);
   }

@@ -7,7 +7,7 @@ export const errorHandler = (err, req, res, next) => {
   }
 
   if (err.field && err.field !== 'productPic') {
-    return res.statusCode(400).send({
+    return res.status(400).send({
       success: false,
       message: `productPic expected as fieldname, you sent ${err.field}`,
     });
