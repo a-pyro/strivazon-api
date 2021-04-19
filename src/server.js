@@ -9,6 +9,7 @@ import { join, dirname } from 'path';
 const currentFile = fileURLToPath(import.meta.url);
 const currentFolder = dirname(currentFile);
 const publicFolder = join(currentFolder, '../public');
+
 const app = express();
 
 if (process.env.NODE_ENV === 'development') {

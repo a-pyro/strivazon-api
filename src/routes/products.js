@@ -7,10 +7,11 @@ import {
   uploadProductPic,
   getProductReviews,
 } from '../controllers/products.js';
+import { validateProduct } from '../middlewares/validation/productsValidation.js';
 
 const router = Router();
 
-router.route('/').get(getProducts).post(addProduct);
+router.route('/').get(getProducts).post(validateProduct, addProduct);
 
 router.route('/:id').put(modifyProduct).delete(deleteProduct);
 

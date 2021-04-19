@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 // @desc    Get all products
 // @route   GET /products
 export const getProducts = async (req, res, next) => {
@@ -7,7 +9,9 @@ export const getProducts = async (req, res, next) => {
 // @desc    add product
 // @route   POST /products
 
-export const addProduct = async (req, res, next) => {};
+export const addProduct = async (req, res, next) => {
+  const newProduct = { ...req.body, _id: uuidv4(), createdAt: new Date() };
+};
 
 // @desc    modify  product
 // @route   PUT /products/:id

@@ -1,8 +1,14 @@
 export const errorHandler = (err, req, res, next) => {
-  res.status(err.statusCode).send({ success: false, message: err.message });
+  if (err.origin === 'productValidation') {
+    return res.status(err.statusCode).res.send({
+      success: false,
+      message: err.message,
+      errorList: err.errorList,
+    });
+  }
 
   if (!err.statusCode) {
-    res.status(500).send({
+    return res.status(500).send({
       success: false,
       message: 'internal server error',
     });
