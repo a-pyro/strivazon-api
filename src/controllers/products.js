@@ -40,18 +40,22 @@ export const modifyProduct = async (req, res, next) => {
   const products = await fetchProducts();
   let modifiedProduct;
 
-  const newProducts = products.reduce((acc, cv) => {
-    if (cv._id === req.params.id) {
-      modifiedProduct = { ...cv, ...req.body, updatedAt: new Date() };
-      acc.push(modifiedProduct);
+  if (products.some((prod) => prod._id === req.params.id)) {
+    const newProducts = products.reduce((acc, cv) => {
+      if (cv._id === req.params.id) {
+        modifiedProduct = { ...cv, ...req.body, updatedAt: new Date() };
+        acc.push(modifiedProduct);
+        return acc;
+      }
+      acc.push(cv);
       return acc;
-    }
-    acc.push(cv);
-    return acc;
-  }, []);
+    }, []);
 
-  await writeProducts(newProducts);
-  res.status(200).send({ success: true, data: modifiedProduct });
+    await writeProducts(newProducts);
+    res.status(200).send({ success: true, data: modifiedProduct });
+  } else {
+    next(new ErrorResponse('Product not found', 404));
+  }
 };
 
 // @desc    delete product

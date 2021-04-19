@@ -1,5 +1,7 @@
 import { check, validationResult } from 'express-validator';
 import ErrorResponse from '../../utils/errorResponse.js';
+import multer from 'multer';
+import { extname } from 'path';
 
 export const validateProduct = [
   check('name').trim().notEmpty().withMessage('name cannot be empty'),
@@ -24,4 +26,22 @@ export const validateProduct = [
     next();
   },
 ];
-// export const validateId
+
+export const multerValidation = (req, res, next) => {
+  const upload = multer({
+    fileFilter: function (req, file, cb) {
+      const acceptedExt = ['.png', '.jpg', '.gif', '.bmp', '.jpeg'];
+      if (!acceptedExt.includes(extname(file.originalname))) {
+        return cb(
+          new ErrorResponse(
+            `Image type not allowed: ${extname(file.originalname)}`,
+            400,
+            'multerExt'
+          )
+        );
+      }
+      cb(null, true);
+    },
+  });
+  return upload.single('productPic');
+};

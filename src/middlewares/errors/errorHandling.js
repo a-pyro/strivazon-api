@@ -1,4 +1,18 @@
 export const errorHandler = (err, req, res, next) => {
+  if (err.origin === 'multerExt') {
+    return res.status(err.statusCode).send({
+      success: false,
+      message: err.message,
+    });
+  }
+
+  if (err.field && err.field !== 'productPic') {
+    return res.statusCode(400).send({
+      success: false,
+      message: `productPic expected as fieldname, you sent ${err.field}`,
+    });
+  }
+
   if (err.origin === 'productValidation') {
     return res
       .status(err.statusCode)
