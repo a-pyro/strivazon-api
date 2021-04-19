@@ -5,6 +5,7 @@ import productsRoutes from './routes/products.js';
 import reviewsRoutes from './routes/reviews.js';
 import { fileURLToPath } from 'url';
 import { join, dirname } from 'path';
+import { errorHandler } from './middlewares/errors/errorHandling.js';
 
 const currentFile = fileURLToPath(import.meta.url);
 const currentFolder = dirname(currentFile);
@@ -22,6 +23,8 @@ app.use(express.json());
 
 app.use('/products', productsRoutes);
 app.use('/reviews', reviewsRoutes);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 

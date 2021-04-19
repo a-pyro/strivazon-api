@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { fetchProducts } from '../utils/fsUtils.js';
 
 // @desc    Get all products
 // @route   GET /products
@@ -10,7 +11,15 @@ export const getProducts = async (req, res, next) => {
 // @route   POST /products
 
 export const addProduct = async (req, res, next) => {
-  const newProduct = { ...req.body, _id: uuidv4(), createdAt: new Date() };
+  try {
+    const products = await fetchProducts();
+    const newProduct = { ...req.body, _id: uuidv4(), createdAt: new Date() };
+    console.log(products);
+    // const productAlreadyPresent = products.some(prod => prod._id === new)
+    res.send({ ...newProduct });
+  } catch (error) {
+    return next(error);
+  }
 };
 
 // @desc    modify  product
