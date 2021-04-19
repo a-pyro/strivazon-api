@@ -30,7 +30,7 @@ export const addReview = async (req, res, next) => {
 
     reviews.push(newReview);
 
-    await writeReviews(students);
+    await writeReviews(reviews);
 
     res.status(201).send({ _id: newReview._id });
   } catch (error) {
