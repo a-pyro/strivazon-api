@@ -126,4 +126,10 @@ export const uploadProductPic = async (req, res, next) => {
 
 // @desc    get reviews for a product
 // @route   GET /products/:id/reviews
-export const getProductReviews = async (req, res, next) => {};
+export const getProductReviews = async (req, res, next) => {
+  try {
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
