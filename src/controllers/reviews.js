@@ -30,9 +30,9 @@ export const addReview = async (req, res, next) => {
 
     reviews.push(newReview);
 
-    await writeReviews(students);
+    await writeReviews(reviews);
 
-    res.status(201).send({ id: newReview._id });
+    res.status(201).send({ _id: newReview._id });
   } catch (error) {
     console.log(error);
   }
@@ -57,7 +57,7 @@ export const modifyReview = async (req, res, next) => {
 
     await writeReviews(findReview);
 
-    res.send({ data: "HELLO FROM PUT ROUTE!" });
+    res.status(201).send("Edited successful", { _id: modifiedReview._id });
   } catch (error) {
     console.log(error);
   }
