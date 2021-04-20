@@ -13,6 +13,7 @@ import {
   validateProduct,
   validateProductSchema,
 } from '../middlewares/validation/productsValidation.js';
+import multerValidation from '../middlewares/validation/multerValidation.js';
 const upload = multerValidation();
 const router = Router();
 
