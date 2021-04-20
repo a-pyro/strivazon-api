@@ -1,9 +1,9 @@
 const multerValidation = (req, res, next) => {
   const upload = multer({
-    fileFilter: function (req, file, cb) {
+    fileFilter: function (req, file, next) {
       const acceptedExt = ['.png', '.jpg', '.gif', '.bmp', '.jpeg'];
       if (!acceptedExt.includes(extname(file.originalname))) {
-        return cb(
+        return next(
           new ErrorResponse(
             `Image type not allowed: ${extname(file.originalname)}`,
             400,
@@ -11,7 +11,7 @@ const multerValidation = (req, res, next) => {
           )
         );
       }
-      cb(null, true);
+      next(null, true);
     },
   });
   return upload.single('productPic');
