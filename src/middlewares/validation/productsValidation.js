@@ -57,3 +57,30 @@ export const multerValidation = (req, res, next) => {
 // export const validateProductSchema = (req, res, next) => {
 //   checkSchema()
 // }
+
+export const validateProductSchema = (req, res, next) => {
+  const productValidationSchema = {
+    name: {
+      notEmpty: true,
+      errorMessage: 'name cannot be empty',
+    },
+    description: {
+      notEmpty: true,
+      errorMessage: 'description cannot be empty',
+    },
+    brand: {
+      notEmpty: true,
+      errorMessage: 'brand cannot be empty',
+    },
+    price: {
+      notEmpty: true,
+      errorMessage: 'price cannot be empty',
+    },
+    category: {
+      notEmpty: true,
+      errorMessage: 'category cannot be empty',
+    },
+  };
+  checkSchema(productValidationSchema);
+  next();
+};

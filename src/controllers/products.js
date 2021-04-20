@@ -26,7 +26,7 @@ export const getProductsByQuery = async (req, res, next) => {
   try {
     if (Object.keys(req.query).length > 0) {
       const products = await fetchProducts();
-      let output = [];
+      let output = {};
 
       // console.log(req.query);
       // const output = products.filter((prod) => prod[req]);

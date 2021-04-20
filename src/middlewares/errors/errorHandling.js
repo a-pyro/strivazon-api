@@ -1,3 +1,13 @@
+export const routeNotFoundHandler = (req, res, next) => {
+  if (!req.pathname) {
+    res.status(404).send({
+      message: `${req.protocol}://${req.hostname}:${process.env.PORT}${req.originalUrl} is not implemented!`,
+    });
+  } else {
+    next();
+  }
+};
+
 export const errorHandler = (err, req, res, next) => {
   if (err.origin === 'multerExt') {
     return res.status(err.statusCode).send({

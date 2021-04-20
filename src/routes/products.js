@@ -11,6 +11,7 @@ import {
 import {
   multerValidation,
   validateProduct,
+  validateProductSchema,
 } from '../middlewares/validation/productsValidation.js';
 const upload = multerValidation();
 const router = Router();
@@ -20,7 +21,11 @@ router
   .get(getProductsByQuery, getProducts)
   .post(validateProduct, addProduct);
 
-router.route('/:id').put(validateProduct, modifyProduct).delete(deleteProduct);
+// router.route('/:id').put(validateProduct, modifyProduct).delete(deleteProduct);
+router
+  .route('/:id')
+  .put(validateProductSchema, modifyProduct)
+  .delete(deleteProduct);
 
 router.route('/:id/upload').post(upload, uploadProductPic);
 
